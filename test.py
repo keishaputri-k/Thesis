@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.ensemble import IsolationForest, RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder, StandardScaler
-from sklearn.metrics import classification_report, confusion_matrix, f1_score
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -16,13 +16,9 @@ print(microwave_link_data.head())
 print("\nSIMS Data:")
 print(sims_data.head())
 
-# Check for 'tanggal' column in microwave_link_data
+# Check if 'tanggal' column exists in microwave_link_data
 if 'tanggal' not in microwave_link_data.columns:
-    print("\ncan't be calculated bcs of missing date")
-    # Display the mismatched data
-    mismatched_data = microwave_link_data[~microwave_link_data['curr_lic_num'].isin(sims_data['curr_lic_num'])]
-    print("\nMismatched Data:")
-    print(mismatched_data.head())
+    print("Error: 'tanggal' column is missing from Microwave Link data. Can't be calculated.")
 else:
     # Merge the data on 'curr_lic_num'
     merged_data = pd.merge(microwave_link_data, sims_data, left_on='curr_lic_num', right_on='curr_lic_num', how='left')
@@ -73,34 +69,84 @@ else:
     y_pred = rf_classifier.predict(X_test)
 
     # Evaluate the Random Forest Classifier
+    accuracy = accuracy_score(y_test, y_pred)
+    f1 = f1_score(y_test, y_pred)
+
     print("\nRandom Forest Classification Report:")
     print(classification_report(y_test, y_pred))
-    
-    # Calculate F1 score
-    f1 = f1_score(y_test, y_pred)
-    print(f"F1 Score: {f1:.2f}")
-
     print("Confusion Matrix:")
-    cm = confusion_matrix(y_test, y_pred)
-    print(cm)
+    print(confusion_matrix(y_test, y_pred))
 
-    # Visualize the confusion matrix
-    plt.figure(figsize=(10, 8))
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+    # Display the percentage of accuracy and F1 score
+    print(f"Accuracy: {accuracy * 100:.2f}%")
+    print(f"F1 Score: {f1 * 100:.2f}%")
+
+    # Visualize the confusion matrix with larger figure size
+    plt.figure(figsize=(10, 7))
+    sns.heatmap(confusion_matrix(y_test, y_pred), annot=True, fmt='d', cmap='Blues')
     plt.title('Confusion Matrix for Random Forest')
     plt.xlabel('Predicted Label')
     plt.ylabel('True Label')
     plt.show()
 
-    # Feature Importance
+        # Feature Importance
     feature_importances = rf_classifier.feature_importances_
     features_df = pd.DataFrame({'Feature': X.columns, 'Importance': feature_importances})
     features_df = features_df.sort_values(by='Importance', ascending=False)
     print("\nFeature Importances:")
     print(features_df)
 
-    # Visualize Feature Importance
+        # Visualize Feature Importance
     plt.figure(figsize=(10, 8))
     sns.barplot(x='Importance', y='Feature', data=features_df)
     plt.title('Feature Importance')
     plt.show()
+
+# Display mismatched data
+mismatched_data = microwave_link_data[~microwave_link_data['curr_lic_num'].isin(sims_data['curr_lic_num'])]
+
+print("\nMismatched Data:")
+print(mismatched_data)
+
+# Filter out the "Sesuai ISR" value from the 'status' column
+filtered_mismatched_data = mismatched_data[mismatched_data['status'] != 'Sesuai ISR']
+
+# Count the occurrences of each status
+status_counts = filtered_mismatched_data['status'].value_counts()
+
+# Visualize using a bar chart
+plt.figure(figsize=(12, 8))
+sns.barplot(x=status_counts.values, y=status_counts.index, palette='viridis')
+plt.title('Distribution of Status in Mismatched Data (Excluding "Sesuai ISR")')
+plt.xlabel('Count')
+plt.ylabel('Status')
+plt.show()
+
+
+# # Count the occurrences of each 'status' in the mismatched data
+# status_counts = mismatched_data['status'].value_counts()
+
+# # Visualize the status counts with a bar plot
+# plt.figure(figsize=(10, 6))
+# sns.barplot(x=status_counts.index, y=status_counts.values, palette='viridis')
+# plt.title('Mismatched Data by Status')
+# plt.xlabel('Status')
+# plt.ylabel('Count')
+# plt.xticks(rotation=45)
+# plt.show()
+
+
+
+# # Assuming 'category_column' is a categorical column in your mismatched data
+# for column in mismatched_data.select_dtypes(include=['object']).columns:
+#     plt.figure(figsize=(12, 8))
+#     sns.countplot(y=column, data=mismatched_data)
+#     plt.title(f'Distribution of {column} in Mismatched Data')
+#     plt.show()
+
+# # Visualize the mismatched data
+# plt.figure(figsize=(12, 8))
+# sns.pairplot(mismatched_data)
+# plt.suptitle('Mismatched Data Pairplot', y=1.02)
+# plt.show()
+
