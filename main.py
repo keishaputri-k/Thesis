@@ -2,7 +2,7 @@
 =============================================================================
 Hybrid ML Simulation Isolation forest and Random Forest — Real-World Data Version
 =============================================================================
-Project     : Architecture Analysis and UI/UX Prototype Design of SIMANTAN
+Project     : Architecture Analysis and UI/UX Prototype Design of Microwave Link Compliance and Anomaly Detection System
 Journal     : JOIV - International Journal on Informatics Visualization
 Methodology : Design Science Research Methodology (DSRM) - Peffers et al.
 
@@ -74,7 +74,7 @@ AUGMENT_TARGET = 300  # Target rows after augmentation (disclosed in paper)
 anomaly_ratio = 0.3
 FREQ_TOLERANCE_MHZ = 1.0
 BW_TOLERANCE_MHZ = 0.5
-OUTPUT_MISMATCH_REPORT = "SIMANTAN_Mismatch_Report.csv"
+OUTPUT_MISMATCH_REPORT = "Mismatch_Report.csv"
 
 np.random.seed(RANDOM_STATE)
 
@@ -181,7 +181,7 @@ def build_mismatch_reason(row):
 
 
 print("=" * 70)
-print("  SIMANTAN Hybrid ML Simulation — Real-World Data Version")
+print("  HYBRID ML Simulation — Real-World Data Version")
 print("=" * 70)
 
 
@@ -701,7 +701,7 @@ print(f"\n[STEP 7] Generating publication-quality figures...")
 # ---- FIGURE 1: Hybrid ML Performance Dashboard ----
 fig1, axes = plt.subplots(2, 2, figsize=(14, 10))
 fig1.suptitle(
-    "Figure 1. SIMANTAN Hybrid ML Performance Dashboard\n"
+    "Figure 1. Hybrid ML Performance Dashboard\n"
     "Real-World Balmon Field Data — Microwave Link Anomaly Detection",
     fontsize=14,
     fontweight="bold",
@@ -819,7 +819,7 @@ plt.show()
 print("         Fig 1 saved.")
 
 
-# ---- FIGURE 2: Feature Importance (maps to SIMANTAN UI priority) ----
+# ---- FIGURE 2: Feature Importance (maps to UI priority) ----
 fi_df = pd.DataFrame(
     {
         "Feature": FEATURE_COLS,
@@ -879,7 +879,7 @@ ax2.axvline(
 )
 ax2.set_title(
     "Figure 2. Feature Importance — Random Forest\n"
-    "SIMANTAN Anomaly Detection Panel Priority Mapping (Real-World Data)",
+    "Anomaly Detection Panel Priority Mapping (Real-World Data)",
     fontweight="bold",
 )
 ax2.set_xlabel("Importance Score (Mean Decrease in Impurity)")
@@ -894,7 +894,7 @@ ax2.legend(handles=[high_patch, low_patch], framealpha=0.9)
 ax2.text(
     0.99,
     0.02,
-    "★ = Highest priority in SIMANTAN dashboard",
+    "★ = Highest priority in dashboard",
     transform=ax2.transAxes,
     ha="right",
     fontsize=8,
@@ -982,7 +982,7 @@ print("         Fig 3 saved.")
 
 # ---- FIGURE 4: Compliance Status Map (Geographic Distribution) ----
 # Maps station coordinates to compliance status — corresponds to the
-# SIMANTAN geographic risk map in the Figma prototype dashboard.
+# geographic risk map in the Figma prototype dashboard.
 
 geo_data = merged.copy()
 geo_data["status_label"] = geo_data["ground_truth"]
@@ -1029,7 +1029,7 @@ for _, row in geo_data.iterrows():
 
 ax4.set_title(
     "Figure 4. Microwave Link Station Geographic Compliance Map\n"
-    "SIMANTAN Dashboard — Jakarta Area Field Inspection",
+    "Dashboard — Jabodetabek Area Field Inspection",
     fontweight="bold",
 )
 ax4.set_xlabel("Longitude")
@@ -1107,7 +1107,7 @@ print("Final class balance:", pd.Series(y_aug).value_counts(normalize=True))
 # =============================================================================
 
 print(f"\n{'='*70}")
-print(f"  SIMANTAN HYBRID ML — REAL-WORLD SIMULATION SUMMARY")
+print(f" HYBRID ML — REAL-WORLD SIMULATION SUMMARY")
 print(f"{'='*70}")
 print(f"  Data Source      : Balmon Class I Jakarta Field Inspections")
 print(
